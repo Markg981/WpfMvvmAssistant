@@ -2,6 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:vm="clr-namespace:UI.Wpf.ViewModels"
         Title="SQL Studio Pro" 
         Height="800" Width="1400"
         WindowStartupLocation="CenterScreen"
@@ -77,13 +78,30 @@
                                Margin="10"
                                FontSize="14"/>
                     
-                    <TreeView x:Name="SchemaTreeView"
-                              Margin="5"
-                              Background="Transparent">
-                        <TreeViewItem Header="Connect to view schema" 
-                                      FontStyle="Italic"
-                                      Foreground="{DynamicResource MaterialDesignBodyLight}"/>
-                    </TreeView>
+                    <Grid>
+                        <TextBlock Text="Connect to database to view schema" 
+                                   FontStyle="Italic"
+                                   Foreground="{DynamicResource MaterialDesignBodyLight}"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center"
+                                   Margin="10"
+                                   Visibility="{Binding CurrentSchema, Converter={StaticResource InvertedNullToVisibilityConverter}}"/>
+                        
+                        <ScrollViewer Visibility="{Binding CurrentSchema, Converter={StaticResource NullToVisibilityConverter}}">
+                            <TreeView x:Name="SchemaTreeView"
+                                      Margin="5"
+                                      Background="Transparent">
+                                <TreeView.Resources>
+                                    <HierarchicalDataTemplate DataType="{x:Type vm:SchemaTreeItem}" ItemsSource="{Binding Children}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="{Binding Icon}" Height="16" Width="16" Margin="0,0,5,0"/>
+                                            <TextBlock Text="{Binding Name}"/>
+                                        </StackPanel>
+                                    </HierarchicalDataTemplate>
+                                </TreeView.Resources>
+                            </TreeView>
+                        </ScrollViewer>
+                    </Grid>
                 </DockPanel>
             </Border>
 
@@ -130,6 +148,11 @@
                                     • Query results with export to CSV<LineBreak/>
                                     • Secure connection management with encryption<LineBreak/>
                                     • Light and dark themes
+                                </TextBlock>
+
+                                <TextBlock Text="Note:" FontWeight="Bold" Margin="0,20,0,5" Foreground="OrangeRed"/>
+                                <TextBlock TextWrapping="Wrap" Foreground="OrangeRed">
+                                    This is a Windows desktop application. Download all files and run on Windows 10/11 with .NET 8 SDK.
                                 </TextBlock>
                             </StackPanel>
                         </ScrollViewer>

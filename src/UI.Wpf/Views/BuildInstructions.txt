@@ -1,0 +1,48 @@
+SQL STUDIO PRO - BUILD INSTRUCTIONS
+=====================================
+
+This is a Windows Presentation Foundation (WPF) desktop application.
+It CANNOT run in Replit's Linux environment.
+
+TO BUILD AND RUN:
+-----------------
+
+1. Download all project files to a Windows computer
+
+2. Open PowerShell or Command Prompt
+
+3. Navigate to the project folder:
+   cd path\to\SqlStudioPro
+
+4. Restore NuGet packages:
+   dotnet restore SqlStudioPro.sln
+
+5. Build the solution:
+   dotnet build SqlStudioPro.sln --configuration Release
+
+6. Run the application:
+   cd src\UI.Wpf
+   dotnet run
+
+ALTERNATIVE - Visual Studio:
+-----------------------------
+1. Open SqlStudioPro.sln in Visual Studio 2022
+2. Press F5 to build and run
+
+REQUIREMENTS:
+-------------
+- Windows 10 or Windows 11 (64-bit)
+- .NET 8 SDK
+- SQL Server (LocalDB, Express, Standard, or Enterprise)
+
+FEATURES:
+---------
+✓ Connection management with DPAPI encryption
+✓ Database schema browser
+✓ SQL query editor
+✓ Natural language to SQL translation  
+✓ Query results grid
+✓ MaterialDesign UI with themes
+✓ MVVM architecture
+
+For detailed documentation, see README.md

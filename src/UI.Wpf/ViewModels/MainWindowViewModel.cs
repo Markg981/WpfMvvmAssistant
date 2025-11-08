@@ -121,10 +121,17 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
-    private Task ShowConnectionManagerAsync()
+    private async Task ShowConnectionManagerAsync()
     {
         StatusMessage = "Opening connection manager...";
-        return Task.CompletedTask;
+        
+        var connectionManagerWindow = new Views.ConnectionManagerWindow();
+        var viewModel = new ConnectionManagerViewModel(_connectionService, _logger);
+        connectionManagerWindow.DataContext = viewModel;
+        
+        connectionManagerWindow.ShowDialog();
+        
+        await LoadInitialDataAsync();
     }
 
     private void CreateNewQueryTab()
