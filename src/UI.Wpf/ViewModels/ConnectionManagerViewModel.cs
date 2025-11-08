@@ -33,8 +33,16 @@ public class ConnectionManagerViewModel : ViewModelBase
         SaveCommand = new AsyncRelayCommand(async _ => await SaveConnectionAsync(), _ => CanSave());
         DeleteCommand = new AsyncRelayCommand(async _ => await DeleteConnectionAsync(), _ => SelectedConnection != null);
         TestConnectionCommand = new AsyncRelayCommand(async _ => await TestConnectionAsync(), _ => CanTestConnection());
+        ConnectCommand = new RelayCommand(_ => Connect(), _ => SelectedConnection != null);
 
         _ = LoadConnectionsAsync();
+    }
+
+    public event Action<bool> RequestClose;
+
+    private void OnRequestClose(bool dialogResult)
+    {
+        RequestClose?.Invoke(dialogResult);
     }
 
     public ObservableCollection<ConnectionInfo> Connections { get; }
@@ -103,6 +111,12 @@ public class ConnectionManagerViewModel : ViewModelBase
     public ICommand SaveCommand { get; }
     public ICommand DeleteCommand { get; }
     public ICommand TestConnectionCommand { get; }
+    public ICommand ConnectCommand { get; }
+
+    private void Connect()
+    {
+        OnRequestClose(true);
+    }
 
     private async Task LoadConnectionsAsync()
     {
