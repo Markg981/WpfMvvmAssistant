@@ -15,7 +15,7 @@ public class ConnectionInfo
 
     public string GetConnectionString()
     {
-        var builder = new System.Data.SqlClient.SqlConnectionStringBuilder
+        var builder = new Microsoft.Data.SqlClient.SqlConnectionStringBuilder
         {
             DataSource = ServerName,
             InitialCatalog = DatabaseName,
