@@ -128,10 +128,15 @@ public class MainWindowViewModel : ViewModelBase
         var connectionManagerWindow = new Views.ConnectionManagerWindow();
         var viewModel = new ConnectionManagerViewModel(_connectionService, _logger);
         connectionManagerWindow.DataContext = viewModel;
-        
-        connectionManagerWindow.ShowDialog();
-        
-        await LoadInitialDataAsync();
+
+        if (connectionManagerWindow.ShowDialog() == true)
+        {
+            SelectedConnection = viewModel.SelectedConnection;
+        }
+        else
+        {
+            await LoadInitialDataAsync();
+        }
     }
 
     private void CreateNewQueryTab()
