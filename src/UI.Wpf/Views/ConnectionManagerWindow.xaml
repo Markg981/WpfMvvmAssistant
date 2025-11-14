@@ -82,6 +82,11 @@
                         Command="{Binding TestConnectionCommand}"
                         Margin="0,0,10,0"
                         Style="{StaticResource MaterialDesignOutlinedButton}"/>
+
+                <Button Content="Connect"
+                        Command="{Binding ConnectCommand}"
+                        Margin="0,0,10,0"
+                        Style="{StaticResource MaterialDesignRaisedButton}"/>
                 
                 <Button Content="Save"
                         Command="{Binding SaveCommand}"

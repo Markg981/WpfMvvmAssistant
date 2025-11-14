@@ -128,10 +128,30 @@ public class MainWindowViewModel : ViewModelBase
         var connectionManagerWindow = new Views.ConnectionManagerWindow();
         var viewModel = new ConnectionManagerViewModel(_connectionService, _logger);
         connectionManagerWindow.DataContext = viewModel;
-        
-        connectionManagerWindow.ShowDialog();
-        
-        await LoadInitialDataAsync();
+
+        if (connectionManagerWindow.ShowDialog() == true)
+        {
+            var newConnection = viewModel.SelectedConnection;
+            if (newConnection != null)
+            {
+                // If the selected connection is the same as the current one, the property setter won't trigger a refresh.
+                // We must manually trigger the schema load in that case.
+                if (_selectedConnection?.Id == newConnection.Id)
+                {
+                    await LoadSchemaAsync();
+                }
+                else
+                {
+                    SelectedConnection = newConnection;
+                }
+            }
+        }
+        else
+        {
+            // If the user closed the dialog without connecting, reload the initial data
+            // to ensure the UI is consistent.
+            await LoadInitialDataAsync();
+        }
     }
 
     private void CreateNewQueryTab()
