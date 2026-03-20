@@ -223,6 +223,13 @@ public class RuleBasedNaturalLanguageTranslator : INaturalLanguageQueryTranslato
 
     private class QueryParser
     {
+        // Performance optimization:
+        // Compiling these frequently used regexes reduces the processing time of NLP query parsing
+        // by avoiding repeated compilation within nested table/column loops.
+        private static readonly Regex _lastDaysRegex = new Regex(@"last\s+(\d+)\s+days", RegexOptions.Compiled);
+        private static readonly Regex _topRegex = new Regex(@"top\s+(\d+)", RegexOptions.Compiled);
+        private static readonly Regex _firstRegex = new Regex(@"first\s+(\d+)", RegexOptions.Compiled);
+
         private readonly string _input;
         private readonly DatabaseSchema _schema;
         private readonly string _defaultSchema;
@@ -326,7 +333,7 @@ public class RuleBasedNaturalLanguageTranslator : INaturalLanguageQueryTranslato
                 {
                     if (_input.Contains("last") && _input.Contains("days"))
                     {
-                        var daysMatch = Regex.Match(_input, @"last\s+(\d+)\s+days");
+                        var daysMatch = _lastDaysRegex.Match(_input);
                         if (daysMatch.Success)
                         {
                             var days = daysMatch.Groups[1].Value;
@@ -412,15 +419,13 @@ public class RuleBasedNaturalLanguageTranslator : INaturalLanguageQueryTranslato
 
         private int? FindLimit()
         {
-            var topPattern = @"top\s+(\d+)";
-            var topMatch = Regex.Match(_input, topPattern);
+            var topMatch = _topRegex.Match(_input);
             if (topMatch.Success)
             {
                 return int.Parse(topMatch.Groups[1].Value);
             }
 
-            var firstPattern = @"first\s+(\d+)";
-            var firstMatch = Regex.Match(_input, firstPattern);
+            var firstMatch = _firstRegex.Match(_input);
             if (firstMatch.Success)
             {
                 return int.Parse(firstMatch.Groups[1].Value);
