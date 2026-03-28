@@ -1,0 +1,3 @@
+## 2024-05-24 - Static Regex vs Dynamic Regex Overhead
+**Learning:** Recompiling dynamic regex patterns inside a method or loop using `RegexOptions.Compiled` (or relying on implicit dynamic compilation with `Regex.Match(string)`) is a performance anti-pattern. Benchmarks show pre-compiled static instances are significantly faster for frequently evaluated strings.
+**Action:** Extract performance-critical regex patterns into `private static readonly Regex _pattern = new Regex("...", RegexOptions.Compiled);` instead of instantiating string patterns and calling `Regex.Match` inline, particularly when traversing or matching across a collection.
