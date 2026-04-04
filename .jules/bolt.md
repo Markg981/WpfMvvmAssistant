@@ -1,0 +1,3 @@
+## 2024-05-24 - RegexOptions.Compiled Anti-pattern in loops
+**Learning:** Compiling dynamic regex patterns inside a loop using `RegexOptions.Compiled` is a severe performance anti-pattern. While `RegexOptions.Compiled` speeds up execution of static patterns by compiling them to MSIL, using it on dynamic strings (like `where {columnName} is ...`) inside a loop causes the regex engine to recompile a new assembly for every variation, leading to massive CPU and memory overhead.
+**Action:** Always extract static regex patterns into `private static readonly Regex` fields with `RegexOptions.Compiled`. For dynamic patterns created in loops, stick to standard `Regex.Match` calls without compilation.
