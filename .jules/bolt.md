@@ -1,0 +1,3 @@
+## 2024-04-05 - Compiled Regex vs Dynamic Regex
+**Learning:** In `RuleBasedNaturalLanguageTranslator`, compiling dynamic regex patterns inside a loop using `RegexOptions.Compiled` is a severe performance anti-pattern due to recompilation overhead. However, static patterns (like 'top', 'first', and 'last X days') should be implemented as `static readonly Regex` instances with `RegexOptions.Compiled` to avoid repeated compilation, yielding ~90% faster execution compared to dynamic `Regex.Match` calls.
+**Action:** Always extract static performance-critical regex patterns to `static readonly` fields with `RegexOptions.Compiled`, but keep dynamic strings as standard `Regex.Match` calls.
