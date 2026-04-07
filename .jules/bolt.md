@@ -1,0 +1,3 @@
+## 2025-02-12 - [Regex Optimization in Query Parser]
+**Learning:** Compiling dynamic regex patterns inside a loop using `RegexOptions.Compiled` is a performance anti-pattern. Standard `Regex.Match` calls should be used for dynamic strings to avoid severe recompilation overhead. On the other hand, static performance-critical patterns should be instantiated once as `static readonly` fields with `RegexOptions.Compiled` to avoid repeated compilation on every request.
+**Action:** Always extract static regular expressions into `static readonly` fields and compile them once with `RegexOptions.Compiled`. Never use `RegexOptions.Compiled` for dynamic patterns inside loops.
