@@ -1,0 +1,3 @@
+## 2024-05-24 - [Regex Parsing] Pre-compile Static Regex Expressions
+**Learning:** In C#, instantiating regular expressions using `Regex.Match(input, pattern)` inside a parsing loop incurs significant CPU overhead because the engine has to parse the pattern repeatedly. Dynamic regex strings (like `$@"where\s+{columnName}..."`) cannot be statically compiled efficiently because the pattern changes per loop. However, static regexes (`"last\s+(\d+)\s+days"`, `"top\s+(\d+)"`) can be compiled once.
+**Action:** Extract static regex patterns into `private static readonly Regex` instances configured with `RegexOptions.Compiled` at the class level. Avoid compiling dynamic regex patterns generated in loops to prevent the performance anti-pattern of continuous regex recompilation.
