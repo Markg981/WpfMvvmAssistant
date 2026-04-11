@@ -1,0 +1,3 @@
+## 2024-05-24 - Dynamic Regex Compilation Anti-Pattern
+**Learning:** Compiling dynamic regex patterns inside a loop using `RegexOptions.Compiled` is a severe performance anti-pattern. While static regex patterns benefit from compilation by avoiding repeated parsing overhead, dynamically constructed strings force the regex engine to compile a new assembly each time, resulting in significant memory allocations and performance degradation.
+**Action:** Use `static readonly Regex` instances with `RegexOptions.Compiled` for all static, performance-critical patterns. For dynamically generated patterns (e.g., those containing variables), rely on standard `Regex.Match` calls without the `Compiled` flag to avoid the recompilation overhead.
