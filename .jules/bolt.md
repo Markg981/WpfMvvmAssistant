@@ -1,0 +1,3 @@
+## 2024-04-27 - [Avoid dynamic Regex compilation]
+**Learning:** Compiling dynamic regex patterns inside a loop using `RegexOptions.Compiled` is a severe performance anti-pattern that destroys performance due to massive GC pressure and repeated IL generation overhead. Standard `Regex.Match` calls should be used for dynamic strings to avoid recompilation overhead. For static strings, using `RegexOptions.Compiled` is acceptable.
+**Action:** Always extract static regex patterns to `static readonly Regex` instances with `RegexOptions.Compiled` in order to optimize performance, avoiding overhead inside high-frequency execution paths.
