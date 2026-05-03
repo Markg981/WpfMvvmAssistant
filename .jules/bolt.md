@@ -1,0 +1,3 @@
+## 2024-05-18 - Avoid RegexOptions.Compiled on Dynamic Patterns inside Loops
+**Learning:** Compiling dynamic regex patterns inside a loop using `RegexOptions.Compiled` is a severe performance anti-pattern that destroys performance due to massive GC pressure and repeated IL generation overhead. Standard `Regex.Match` calls should be used for dynamic strings to avoid recompilation overhead.
+**Action:** Always extract static regex patterns into `static readonly Regex` instances with `RegexOptions.Compiled` at the class level. For dynamic patterns (e.g. including dynamic column names), use standard `Regex.Match` calls instead of attempting to compile them.
