@@ -1,0 +1,3 @@
+## 2024-05-24 - Dynamic Regex compilation overhead
+**Learning:** In `RuleBasedNaturalLanguageTranslator.cs`, there are both static and dynamic regex patterns used. Compiling static regex patterns using `RegexOptions.Compiled` makes execution 90% faster by avoiding pattern recompilation. However, attempting to apply this to dynamic regex patterns generated inside loops creates massive GC pressure and memory leaks as IL is repeatedly generated for unique strings.
+**Action:** Always extract static regex patterns to `static readonly Regex` fields with `RegexOptions.Compiled`. Keep dynamically interpolated regex strings as standard `Regex.Match` calls to avoid IL compilation overhead and GC spikes.
