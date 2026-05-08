@@ -1,0 +1,3 @@
+## 2024-05-15 - Pre-compiled Regexes in NLP Translator
+**Learning:** In `RuleBasedNaturalLanguageTranslator.cs`, there were multiple dynamic `Regex.Match` calls for patterns like `last X days`, `top X`, and `first X`. Inside standard .NET code (and especially for natural language processing functions like `FindLimit` and `FindConditions`), dynamically compiling regexes on every call is an unnecessary overhead. Using `static readonly Regex` initialized with `RegexOptions.Compiled` avoids recompiling these static patterns repeatedly.
+**Action:** Always pre-compile static Regex patterns using `RegexOptions.Compiled` and store them in `private static readonly Regex` fields when they are used repeatedly, especially inside parser classes or loops.
