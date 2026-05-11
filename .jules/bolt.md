@@ -1,0 +1,3 @@
+## 2024-10-24 - Static vs Dynamic Regex Compilation Overhead
+**Learning:** In `RuleBasedNaturalLanguageTranslator`, compiling static regex patterns (like 'top X' or 'last X days') inside the `QueryParser` using `RegexOptions.Compiled` is about 90% faster by removing recompilation overhead. However, dynamic patterns that interpolate variable strings (like column names) inside a loop should NOT use `RegexOptions.Compiled` as this is a severe anti-pattern that causes massive recompilation overhead.
+**Action:** When optimizing regex matching loops, always separate static patterns (which should be `static readonly Regex` with `RegexOptions.Compiled`) from dynamic string-based patterns (which should remain standard `Regex.Match`).
