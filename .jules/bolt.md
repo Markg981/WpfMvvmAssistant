@@ -1,0 +1,3 @@
+## 2024-05-19 - Regex Compilation Strategy in NLP Translator
+**Learning:** In the `RuleBasedNaturalLanguageTranslator`, extracting static regular expressions into `private static readonly Regex` instances with `RegexOptions.Compiled` avoids recompilation overhead on every NLP parsing request. However, compiling dynamic patterns (e.g. interpolating `columnName`) inside an iteration is a severe performance anti-pattern.
+**Action:** Always pre-compile performance-critical static regexes, while leaving dynamically-constructed regexes as standard `Regex.Match` calls to avoid the high cost of dynamic compilation inside loops.
