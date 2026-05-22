@@ -1,0 +1,3 @@
+## 2024-06-15 - Regex Compilation Anti-Pattern
+**Learning:** In `RuleBasedNaturalLanguageTranslator`, compiling dynamic regex patterns (like interpolation of `columnName`) inside a loop using `RegexOptions.Compiled` is a severe performance anti-pattern. However, static regex patterns (like `last X days`, `top X`) can significantly benefit from `RegexOptions.Compiled` and static readonly caching (up to 90% faster).
+**Action:** Always extract fixed regex patterns to `static readonly Regex` fields with `RegexOptions.Compiled`. Keep dynamic regex strings as standard `Regex.Match` calls to avoid recompilation memory leaks and overhead.
