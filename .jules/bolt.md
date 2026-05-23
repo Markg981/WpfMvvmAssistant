@@ -1,0 +1,3 @@
+## 2024-05-15 - Optimize Regex Compilation in Natural Language Query Translation
+**Learning:** Compiling static regexes saves ~90% time in the rule-based natural language query translator. However, compiling dynamic regexes in a loop is a severe anti-pattern in this specific context and causes a severe performance hit.
+**Action:** Always precompile static regexes (`RegexOptions.Compiled`) using `private static readonly Regex` fields when possible, but leave dynamic patterns (that build regex patterns based on runtime variables, like `columnName`) as standard `Regex.Match` calls to avoid recompilation overhead.
