@@ -1,0 +1,3 @@
+## 2024-05-18 - Avoid repeated Regex compilation in loops
+**Learning:** Compiling dynamic regex patterns inside a loop using `RegexOptions.Compiled` is a severe performance anti-pattern. However, static regex patterns like 'last X days', 'top X', and 'first X' can be pre-compiled into `static readonly Regex` instances using `RegexOptions.Compiled` to avoid recompilation overhead inside loops.
+**Action:** When working with static regex patterns inside parsing loops, explicitly define them as `static readonly Regex` using `RegexOptions.Compiled` to optimize performance. Retain standard `Regex.Match` calls for dynamic strings.
