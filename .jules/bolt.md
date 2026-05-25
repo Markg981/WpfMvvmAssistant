@@ -1,0 +1,4 @@
+
+## 2023-10-25 - Regex Compilation Optimization
+**Learning:** In `RuleBasedNaturalLanguageTranslator.cs`, we use regexes heavily to parse queries. Using `RegexOptions.Compiled` speeds up parsing considerably, however it is an anti-pattern to compile dynamic regexes inside loops (like the ones built dynamically with string interpolation from column names). For static patterns (like 'top', 'first', and 'last X days'), pre-compiling them to `private static readonly Regex` fields provides a significant performance boost because it avoids compiling the same pattern on every query.
+**Action:** Extract static regex patterns into `private static readonly Regex` instances with `RegexOptions.Compiled`, but avoid compiling dynamic, dynamically-generated regex patterns inside loops to prevent catastrophic performance and memory penalties.
