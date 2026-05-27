@@ -1,0 +1,3 @@
+## 2024-05-27 - [Test Environment Limitation]
+**Learning:** The execution environment has missing dependencies (e.g. `Microsoft.Data.SqlClient` missing from `Core.Domain.csproj`), but adding it violates the architectural boundaries (Domain layer should not depend on Data Access layer). Therefore, test execution failures due to these missing dependencies should be expected and should not be fixed by violating architectural rules.
+**Action:** Do not alter `.csproj` dependencies to fix test execution environment issues. Rely on visual code inspection or local compilation fixes only when they don't break the Onion Architecture.
