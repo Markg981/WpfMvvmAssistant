@@ -8,6 +8,11 @@ namespace Core.Nlp.Implementations;
 
 public class RuleBasedNaturalLanguageTranslator : INaturalLanguageQueryTranslator
 {
+    // Performance: Compile static regex patterns to avoid repeated compilation overhead.
+    private static readonly Regex s_lastDaysRegex = new Regex(@"last\s+(\d+)\s+days", RegexOptions.Compiled);
+    private static readonly Regex s_topRegex = new Regex(@"top\s+(\d+)", RegexOptions.Compiled);
+    private static readonly Regex s_firstRegex = new Regex(@"first\s+(\d+)", RegexOptions.Compiled);
+
     private readonly ILogger _logger;
 
     public RuleBasedNaturalLanguageTranslator(ILogger logger)
@@ -212,7 +217,7 @@ public class RuleBasedNaturalLanguageTranslator : INaturalLanguageQueryTranslato
         return $"x.{condition.Column} {op} {linqValue}";
     }
 
-    private string MakePlural(string word)
+    private static string MakePlural(string word)
     {
         if (word.EndsWith("y"))
             return word.Substring(0, word.Length - 1) + "ies";
@@ -326,7 +331,7 @@ public class RuleBasedNaturalLanguageTranslator : INaturalLanguageQueryTranslato
                 {
                     if (_input.Contains("last") && _input.Contains("days"))
                     {
-                        var daysMatch = Regex.Match(_input, @"last\s+(\d+)\s+days");
+                        var daysMatch = s_lastDaysRegex.Match(_input);
                         if (daysMatch.Success)
                         {
                             var days = daysMatch.Groups[1].Value;
@@ -412,15 +417,13 @@ public class RuleBasedNaturalLanguageTranslator : INaturalLanguageQueryTranslato
 
         private int? FindLimit()
         {
-            var topPattern = @"top\s+(\d+)";
-            var topMatch = Regex.Match(_input, topPattern);
+            var topMatch = s_topRegex.Match(_input);
             if (topMatch.Success)
             {
                 return int.Parse(topMatch.Groups[1].Value);
             }
 
-            var firstPattern = @"first\s+(\d+)";
-            var firstMatch = Regex.Match(_input, firstPattern);
+            var firstMatch = s_firstRegex.Match(_input);
             if (firstMatch.Success)
             {
                 return int.Parse(firstMatch.Groups[1].Value);
@@ -450,15 +453,6 @@ public class RuleBasedNaturalLanguageTranslator : INaturalLanguageQueryTranslato
             }
 
             return orderColumns;
-        }
-
-        private string MakePlural(string word)
-        {
-            if (word.EndsWith("y"))
-                return word.Substring(0, word.Length - 1) + "ies";
-            if (word.EndsWith("s"))
-                return word + "es";
-            return word + "s";
         }
     }
 

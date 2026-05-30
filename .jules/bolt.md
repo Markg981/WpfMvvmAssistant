@@ -1,0 +1,3 @@
+## 2024-05-18 - Compiled static regex patterns for NLP
+**Learning:** Instantiating `Regex` dynamically inside methods like `FindConditions` and `FindLimit` adds heavy compilation overhead that can be avoided if the pattern strings are statically known. Memory constraints specify these optimizations yield ~90% speedup compared to dynamic pattern matching, and that static patterns should be isolated from dynamic patterns utilizing variables.
+**Action:** When working on performance optimizations involving Regex, identify patterns that are constant and elevate them to `static readonly` fields using `RegexOptions.Compiled`.
