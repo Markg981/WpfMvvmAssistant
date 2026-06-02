@@ -1,0 +1,3 @@
+## 2024-05-24 - [Regex Compiled Option Optimization]
+**Learning:** In `RuleBasedNaturalLanguageTranslator`, compiling dynamic regex patterns inside a loop using `RegexOptions.Compiled` is a severe performance anti-pattern leading to memory leaks, while static regex patterns (like "top X", "first X") benefit greatly from `Compiled`.
+**Action:** When optimizing regex matching, carefully differentiate between static strings (which should be `static readonly Regex` with `RegexOptions.Compiled`) and dynamic strings that inject variables (which should remain standard `Regex.Match` calls to avoid recompilation overhead).
