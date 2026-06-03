@@ -1,0 +1,3 @@
+## 2024-05-24 - Precompiled vs Dynamic Regex Patterns
+**Learning:** Compiling dynamic regex patterns inside a loop using `RegexOptions.Compiled` is a severe performance anti-pattern. However, static patterns (like 'top', 'first', 'last X days') should be explicitly precompiled as `static readonly Regex` using `RegexOptions.Compiled` to avoid repeated compilation overhead. Dynamic patterns (e.g. those injecting variables like column names) must remain as standard `Regex.Match` to avoid regex compilation memory leaks.
+**Action:** When working on string parsing or NLP components, separate static from dynamic patterns. Ensure static patterns are compiled once, while dynamic patterns deliberately skip compilation.
