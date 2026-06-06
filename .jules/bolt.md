@@ -1,0 +1,3 @@
+## 2024-06-25 - Performance Optimization: Pre-compiled Regexes in NLP Translator
+**Learning:** Compiling dynamic regex patterns inside a loop using `RegexOptions.Compiled` is a severe performance anti-pattern. However, static patterns that do not change (like `top`, `first`, and `last X days`) should be pre-compiled as static readonly fields to avoid repeated regex compilation overhead on every natural language parsing request.
+**Action:** When adding regexes in `RuleBasedNaturalLanguageTranslator`, use `static readonly Regex` with `RegexOptions.Compiled` for static patterns, but deliberately use standard uncompiled `Regex.Match` for dynamic patterns (like injecting `columnName`) to avoid memory leaks.
