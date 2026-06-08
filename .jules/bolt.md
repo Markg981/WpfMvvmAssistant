@@ -1,0 +1,3 @@
+## 2024-05-24 - Static vs. Dynamic Regex Compilation in RuleBasedNaturalLanguageTranslator
+**Learning:** Performance-critical static regex patterns (like 'top', 'first', and 'last X days') should be implemented as `static readonly Regex` instances with `RegexOptions.Compiled` to avoid repeated compilation overhead (~90% faster). However, dynamic regex patterns (e.g., those injecting variables like `columnName` in `RuleBasedNaturalLanguageTranslator`) must deliberately remain uncompiled (standard `Regex.Match`) to avoid regex compilation memory leaks.
+**Action:** When optimizing Regex usage, carefully distinguish between static patterns that benefit from compilation and dynamic patterns that cause memory leaks if compiled.
