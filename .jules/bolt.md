@@ -1,0 +1,3 @@
+## 2026-06-11 - Static vs Dynamic Regex compilation
+**Learning:** Compiling dynamic regex patterns inside a loop using `RegexOptions.Compiled` is a severe performance anti-pattern and can cause memory leaks. However, performance-critical regex patterns that are static (like 'top', 'first', and 'last X days' in NLP processing) should be implemented as `static readonly Regex` instances with `RegexOptions.Compiled` to avoid repeated compilation overhead.
+**Action:** When working with Regex, always distinguish between static patterns (which should be compiled and reused) and dynamic patterns containing injected variables (which should deliberately remain uncompiled using standard `Regex.Match`).
