@@ -1,0 +1,3 @@
+## 2024-05-24 - [Regex Compilation Overhead]
+**Learning:** Compiling dynamic regex patterns inside a loop using `RegexOptions.Compiled` is a severe performance anti-pattern and memory leak risk. Conversely, for static regex patterns (like "top X", "first X"), failing to use `RegexOptions.Compiled` results in repeated compilation overhead during method invocations.
+**Action:** When implementing regex matching, extract static regex patterns into `static readonly Regex` instances with `RegexOptions.Compiled`. Retain standard `Regex.Match` for dynamic patterns that rely on variables (like checking against variable column names) to avoid memory leaks.
