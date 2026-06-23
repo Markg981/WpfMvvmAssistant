@@ -1,0 +1,5 @@
+## 2024-05-17 - Static vs Dynamic Regex Compilation
+
+**Learning:** While using `RegexOptions.Compiled` with static fields provides a significant performance boost for frequently executed regex patterns (like in NLP parsing where benchamarks show it's ~90% faster), dynamic regex patterns that inject variables (e.g., column names into the pattern string) must remain inline `Regex.Match()` calls without the `Compiled` flag to avoid regex compilation memory leaks. Compiling dynamic strings in a loop is a severe performance anti-pattern.
+
+**Action:** Before optimizing `Regex` calls, evaluate whether the regex pattern string is static or dynamically constructed. Only use `static readonly Regex` with `RegexOptions.Compiled` for patterns that do not change at runtime. For dynamic patterns, continue using inline `Regex.Match()` calls.
