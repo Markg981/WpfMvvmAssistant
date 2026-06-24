@@ -1,0 +1,3 @@
+## 2025-02-12 - Regex Compilation Overhead
+**Learning:** Compiling dynamic regex patterns inside a loop using `RegexOptions.Compiled` is a severe performance anti-pattern. However, static regex patterns (like `top\s+(\d+)`) can be converted to `static readonly Regex` constants with `RegexOptions.Compiled` to avoid the overhead of dynamically instantiating them on every call with `Regex.Match`.
+**Action:** When working with static string patterns evaluated frequently or inside loops, define them as `private static readonly Regex` variables using `RegexOptions.Compiled`. Dynamic queries (e.g. string interpolated with user variables) must remain standard `Regex.Match` to prevent compilation memory leaks.
