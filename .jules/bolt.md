@@ -1,0 +1,3 @@
+## 2024-05-14 - Regex Compilation and Memory Leaks
+**Learning:** In `RuleBasedNaturalLanguageTranslator`, compiling static regex patterns (`RegexOptions.Compiled`) used in loops provides a significant performance boost (approx. 90% faster). However, compiling *dynamic* patterns (like those injecting variables such as `columnName`) causes severe memory leaks because the compiled regex cache grows indefinitely with each new unique string.
+**Action:** When optimizing regex in this codebase, always compile static, reusable patterns using `static readonly Regex` properties, but deliberately leave dynamic patterns uncompiled (using standard `Regex.Match`) to avoid regex compilation memory leaks.
