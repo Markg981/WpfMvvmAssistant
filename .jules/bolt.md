@@ -1,0 +1,3 @@
+## 2026-06-26 - Static vs Dynamic Regex Compilation
+**Learning:** In `RuleBasedNaturalLanguageTranslator`, static performance-critical regex patterns (like 'last X days', 'top X', and 'first X') were being dynamically compiled inside parsing methods using `Regex.Match`. Compiling dynamic strings is a massive anti-pattern in .NET. Moving these to `static readonly Regex` instances with `RegexOptions.Compiled` avoids repeated compilation overhead and significantly speeds up parsing operations.
+**Action:** When working on C# text parsing/NLP codebases, always search for inline `Regex.Match` with static string patterns and extract them to `static readonly Regex` fields with `RegexOptions.Compiled`.
