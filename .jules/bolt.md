@@ -1,0 +1,3 @@
+## 2024-05-24 - Regex Compilation Performance vs. Memory Leak Risk
+**Learning:** Compiling dynamic regex patterns inside a loop using `RegexOptions.Compiled` is a severe performance anti-pattern. While compiling static regex patterns (like 'top' and 'first') with `RegexOptions.Compiled` boosts performance by up to 90% in `RuleBasedNaturalLanguageTranslator`, doing the same for dynamic patterns (those injecting variables) causes regex compilation memory leaks.
+**Action:** Always extract static regex patterns into `static readonly Regex` instances with `RegexOptions.Compiled`. Dynamic patterns must use standard `Regex.Match` calls to avoid recompilation overhead memory leaks.
