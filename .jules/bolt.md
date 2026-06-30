@@ -1,0 +1,3 @@
+## 2024-06-25 - Regex Compilation Anti-Pattern
+**Learning:** In `RuleBasedNaturalLanguageTranslator`, repeatedly compiling dynamic regex patterns (like those injecting variables like `columnName`) inside loops using `RegexOptions.Compiled` causes severe memory leaks and performance overhead. However, static patterns (like matching "top X", "first X", or "last X days") should be instantiated as `static readonly Regex` with `RegexOptions.Compiled` to avoid repeated parsing and compilation overhead on every query.
+**Action:** Use `static readonly Regex` with `RegexOptions.Compiled` for static patterns. Use `Regex.Match` (without `Compiled` option) or `Regex` without `Compiled` for dynamic strings to avoid recompilation overhead and memory leaks.
