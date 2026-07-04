@@ -223,6 +223,15 @@ public class RuleBasedNaturalLanguageTranslator : INaturalLanguageQueryTranslato
 
     private class QueryParser
     {
+        // ⚡ Bolt Performance Optimization:
+        // Static regex patterns are compiled once to avoid recompilation overhead inside loops.
+        // Dynamic regex patterns (like those injecting column names) deliberately remain uncompiled
+        // (using standard Regex.Match) to avoid regex compilation memory leaks and massive performance
+        // degradation from constantly compiling new dynamic expressions.
+        private static readonly Regex LastDaysRegex = new(@"last\s+(\d+)\s+days", RegexOptions.Compiled);
+        private static readonly Regex TopRegex = new(@"top\s+(\d+)", RegexOptions.Compiled);
+        private static readonly Regex FirstRegex = new(@"first\s+(\d+)", RegexOptions.Compiled);
+
         private readonly string _input;
         private readonly DatabaseSchema _schema;
         private readonly string _defaultSchema;
@@ -326,7 +335,7 @@ public class RuleBasedNaturalLanguageTranslator : INaturalLanguageQueryTranslato
                 {
                     if (_input.Contains("last") && _input.Contains("days"))
                     {
-                        var daysMatch = Regex.Match(_input, @"last\s+(\d+)\s+days");
+                        var daysMatch = LastDaysRegex.Match(_input);
                         if (daysMatch.Success)
                         {
                             var days = daysMatch.Groups[1].Value;
@@ -412,15 +421,13 @@ public class RuleBasedNaturalLanguageTranslator : INaturalLanguageQueryTranslato
 
         private int? FindLimit()
         {
-            var topPattern = @"top\s+(\d+)";
-            var topMatch = Regex.Match(_input, topPattern);
+            var topMatch = TopRegex.Match(_input);
             if (topMatch.Success)
             {
                 return int.Parse(topMatch.Groups[1].Value);
             }
 
-            var firstPattern = @"first\s+(\d+)";
-            var firstMatch = Regex.Match(_input, firstPattern);
+            var firstMatch = FirstRegex.Match(_input);
             if (firstMatch.Success)
             {
                 return int.Parse(firstMatch.Groups[1].Value);
