@@ -1,0 +1,3 @@
+## 2024-05-18 - Avoid RegexOptions.Compiled on Dynamic Patterns
+**Learning:** When optimizing Regex in .NET, only static patterns should use `RegexOptions.Compiled` and be declared as `static readonly`. Applying `RegexOptions.Compiled` to dynamic patterns (e.g., those injecting a `columnName` string variable) creates a memory leak because .NET caches the compiled regex assemblies indefinitely.
+**Action:** Audit all `Regex.Match` calls. Extract static patterns to `static readonly Regex` instances with `RegexOptions.Compiled`. Leave dynamic/interpolated patterns as standard `Regex.Match` calls without compilation flags to preserve memory.
